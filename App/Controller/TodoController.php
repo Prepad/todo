@@ -17,18 +17,39 @@ class TodoController
     public static function addTodo()
     {
         $request = RequestSingleton::getInstance();
-        if (!array_key_exists('title', $request->get())){
+        if (!array_key_exists('title', $request->json())){
+            echo 'Need title';
             return;
         }
-        $title = $request->get()['title'];
+        $title = $request->json()['title'];
+        $rows = $request->json()['rows'];
+        foreach($rows as &$row) {
+            $row = ['value' => $row, 'checked' => false];
+        }
         
-        // Todo::all()->each(fn($todo) => $todo->delete());
-
         $todo = new Todo();
         
         $todo->title = $title;
-        $todo->rows = ['stroka','stroka2'];
+        $todo->rows = $rows;
 
         $todo->save();
+        echo json_encode($todo->toArray());
+    }
+
+    public static function update(): void
+    {
+        $request = RequestSingleton::getInstance();
+        $args = $request->json();
+        $id = $args['id'];
+        /** @var Todo $todo */
+        $todo = Todo::find($id);
+        if (!isset($todo)) {
+            echo '404 not found';
+            return;
+        }
+        $todo->title = $args['title'];
+        $todo->rows = $args['rows'];
+        $todo->save();
+        echo json_encode($todo->toArray());
     }
 }

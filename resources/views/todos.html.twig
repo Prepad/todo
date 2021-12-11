@@ -1,7 +1,131 @@
+<html>
+<head>
+<title>Todos</title>
+<style>
+html, body {
+    padding: 0px;
+    margin: 0px;
+}
+
+.todos {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.todo {
+    width: 30%;
+    margin: 1%;
+    border-radius: 5px;
+    border: solid black;
+}
+
+.floating-add {
+    right: 30px;
+    top: 30px;
+    position: absolute;
+    border: 2px solid grey;
+    border-radius: 999px;
+    width: 30pt;
+    height: 30pt;
+    background-color: white;
+    font-size: 30pt;
+    text-align: center;
+    line-height: 30pt;
+    z-index: 1000;
+}
+
+#add-title {
+    width: 200px;
+}
+
+#add-rows {
+    width: 200px;
+    height: 250px;
+}
+
+.add-form-container {
+    color: lightgrey;
+    width: 100%;
+    height: 100%;
+    display: none;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 0px;
+    margin: 0px;
+    position: absolute;
+}
+
+.add-form {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    width: 200px;
+}
+
+.row-checked {
+    text-decoration: line-through
+}
+
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    var formVisible = false
+    var addButton = document.querySelector('.floating-add')
+    var addFormContainer = document.querySelector('.add-form-container')
+    var submitFormButton = document.querySelector('#add-todo')
+
+    function showForm() {
+        formVisible = true
+        addFormContainer.style.display = 'block'
+    }
+    function hideForm() {
+        formVisible = false
+        addFormContainer.style.display = 'none'
+    }
+
+    addButton.addEventListener('click', () => {
+        if (formVisible) {
+            hideForm()
+        } else {
+            showForm()
+        }
+    })
+    
+    submitFormButton.addEventListener('click', () => {
+        var title = document.querySelector('#add-title').value
+        var rows = document.querySelector('#add-rows').value.split('\n')
+        axios.post('/', {data: {title, rows}})
+        hideForm()
+    })
+})
+</script>
+</head>
+<body>
+<div class="floating-add">+</div>
+<div class="add-form-container">
+    <div class="add-form">
+        <div>Title</div>
+        <div><input id="add-title" type="text"></div>
+        <div>ToDos</div>
+        <textarea id="add-rows"></textarea>
+        <div><button id="add-todo">submit</button></div>
+    </div>
+</div>
+<div class="todos">
 {% for item in todos %}
-    {{ item.id }}<br>
-    {{ item.title }}<br>
-    {% for row in item.rows %}
-        {{ row }}<br>
-    {% endfor %}
+    <div class="todo">
+        <div class="id">{{ item.id }}</div>
+        <div class="title">{{ item.title }}</div>
+        <div class="rows">
+        {% for row in item.rows %}
+            <div class="row">{{ row.value }}</div>
+        {% endfor %}
+        </div>
+    </div>
 {% endfor %}
+</todos>
+</body>
+</html>

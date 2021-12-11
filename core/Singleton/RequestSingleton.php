@@ -69,14 +69,14 @@ class RequestSingleton
         return $this->path;
     }
 
-    public function json(): string
+    public function json(): array
     {
         try {
             return json_decode(
                 $this->rawData,
                 associative: true,
                 flags: JSON_THROW_ON_ERROR
-            );
+            )['data'];
         } catch(Exception) {
             return [];
         }

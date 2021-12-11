@@ -1,0 +1,7 @@
+{% for item in todos %}
+    {{ item.id }}<br>
+    {{ item.title }}<br>
+    {% for row in item.rows %}
+        {{ row }}<br>
+    {% endfor %}
+{% endfor %}

@@ -1,0 +1,13 @@
+{
+    "name": "root/localhost",
+    "autoload": {
+        "psr-4": {
+            "App\\": "App/",
+            "Core\\": "core/"
+        }
+    },
+    "require": {
+        "twig/twig": "^2.0",
+        "illuminate/database": "^8.74"
+    }
+}
